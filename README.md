@@ -30,7 +30,7 @@ This is a monorepo containing:
 1. **Clone the repository**
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/mikr13/chat-with-site.git
    cd chat-with-site
    ```
 
