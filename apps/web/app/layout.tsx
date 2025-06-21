@@ -1,7 +1,14 @@
+import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 
+import { QueryProvider } from "@/components/query-provider"
+import { ThemeProvider } from "@/components/theme-provider"
 import "@workspace/ui/globals.css"
-import { Providers } from "@/components/providers"
+
+export const metadata: Metadata = {
+  title: "Chat with Webpage",
+  description: "Load any webpage and have an AI conversation about its content",
+}
 
 const fontSans = Geist({
   subsets: ["latin"],
@@ -23,7 +30,13 @@ export default function RootLayout({
       <body
         className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased `}
       >
-        <Providers>{children}</Providers>
+        <ThemeProvider>
+          <QueryProvider>
+            <div className="min-h-screen max-h-screen h-screen bg-background flex flex-col">
+              {children}
+            </div>
+          </QueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

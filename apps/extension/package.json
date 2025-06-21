@@ -1,0 +1,11 @@
+{
+  "name": "extension",
+  "version": "0.0.1",
+  "type": "module",
+  "private": true,
+  "description": "Chat with Webpage Browser Extension",
+  "scripts": {
+    "build": "echo 'Browser extension build'",
+    "dev": "echo 'Browser extension dev'"
+  }
+}
