@@ -2,6 +2,7 @@
 
 import { Card, CardContent } from "@workspace/ui/components/card";
 import { Skeleton } from "@workspace/ui/components/skeleton";
+import { cn } from "@workspace/ui/lib/utils";
 import type { PropsWithChildren } from "react";
 
 type ChatWindowProps = PropsWithChildren & {
@@ -10,7 +11,7 @@ type ChatWindowProps = PropsWithChildren & {
 
 const ChatWindow = ({ children, className }: ChatWindowProps) => {
   return (
-    <Card className={className ?? "flex-1"}>
+    <Card className={cn("flex-1", className)}>
       <CardContent>
         {children}
       </CardContent>
@@ -20,9 +21,11 @@ const ChatWindow = ({ children, className }: ChatWindowProps) => {
 
 type ChatWindowMessagesProps<T> = {
   messages: T;
+  maxWidth?: string;
 }
 
-const ChatWindowMessages = <T extends { id: string; role: "data" | "system" | "user" | "assistant"; content: string }[]>({ messages }: ChatWindowMessagesProps<T>) => {
+const ChatWindowMessages = <T extends { id: string; role: "data" | "system" | "user" | "assistant"; content: string }[]>({ messages, maxWidth = "max-w-[70%]" }: ChatWindowMessagesProps<T>) => {
+
   if (messages.length === 0) {
     return (
       <div className="text-center text-muted-foreground py-8">
@@ -30,18 +33,25 @@ const ChatWindowMessages = <T extends { id: string; role: "data" | "system" | "u
       </div>
     );
   }
+
   return (
     <>
       {messages.map((message) => (
         <div
           key={message.id}
-          className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
+          className={cn(
+            "flex",
+            message.role === "user" ? "justify-end" : "justify-start"
+          )}
         >
           <div
-            className={`max-w-[70%] rounded-lg px-4 py-2 ${message.role === "user"
-              ? "bg-primary text-primary-foreground"
-              : "bg-secondary text-secondary-foreground"
-              }`}
+            className={cn(
+              maxWidth,
+              "rounded-lg px-4 py-2",
+              message.role === "user"
+                ? "bg-primary text-primary-foreground"
+                : "bg-secondary text-secondary-foreground"
+            )}
           >
             <div className="whitespace-pre-wrap break-words prose dark:prose-invert">
               {message.content}
@@ -53,7 +63,7 @@ const ChatWindowMessages = <T extends { id: string; role: "data" | "system" | "u
   );
 }
 
-const ChatWindowStreamingSkeleton = () => {
+const ChatLoadingSkeleton = () => {
   return (
     <div className="flex justify-start w-[70%]">
       <div className="w-full rounded-lg px-4 py-2 bg-accent flex items-center space-x-2 animate-pulse">
@@ -67,4 +77,4 @@ const ChatWindowStreamingSkeleton = () => {
   );
 }
 
-export { ChatWindow, ChatWindowMessages, ChatWindowStreamingSkeleton };
+export { ChatLoadingSkeleton, ChatWindow, ChatWindowMessages };

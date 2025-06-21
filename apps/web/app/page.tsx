@@ -1,11 +1,11 @@
 "use client";
 
+import { fetchPageContent } from "@/lib/page-content";
 import { useChat, type Message } from "@ai-sdk/react";
 import { useMutation } from "@tanstack/react-query";
-import { fetchPageContent } from "@workspace/lib/page-content";
 import { Card, CardContent, CardTitle } from "@workspace/ui/components/card";
 import { ChatInput } from "@workspace/ui/components/chat-input";
-import { ChatWindow, ChatWindowMessages, ChatWindowStreamingSkeleton } from "@workspace/ui/components/chat-window";
+import { ChatLoadingSkeleton, ChatWindow, ChatWindowMessages } from "@workspace/ui/components/chat-window";
 import { PageInfo } from "@workspace/ui/components/page-info";
 import { ScrollArea } from "@workspace/ui/components/scroll-area";
 import { SuggestedQuestions } from "@workspace/ui/components/suggested-questions";
@@ -51,12 +51,6 @@ export default function Page() {
     }
   };
 
-  const handleContentFetched = (fetchedUrl: string, content: string) => {
-    setUrl(fetchedUrl);
-    setPageContent(content);
-    setSuggestedQuestions([]);
-  };
-
   const handleQuestionClick = (question: string) => {
     // Create a synthetic event for input change
     const syntheticEvent = {
@@ -73,6 +67,12 @@ export default function Page() {
 
       handleSubmit(syntheticSubmitEvent);
     }, 50);
+  };
+
+  const handleContentFetched = (fetchedUrl: string, content: string) => {
+    setUrl(fetchedUrl);
+    setPageContent(content);
+    setSuggestedQuestions([]);
   };
 
   const mutation = useMutation({
@@ -108,8 +108,14 @@ export default function Page() {
                 <div
                   className="flex-1 h-auto overflow-y-auto flex flex-col gap-2"
                 >
-                  <ChatWindowMessages messages={messages as Message[]} />
-                  {status === "submitted" && <ChatWindowStreamingSkeleton />}
+                  {messages.length === 0 ? (
+                    <div className="text-center text-muted-foreground py-8 text-sm">
+                      Start a conversation by asking a question about the webpage content.
+                    </div>
+                  ) : (
+                    <ChatWindowMessages messages={messages as Message[]} />
+                  )}
+                  {status === "submitted" && <ChatLoadingSkeleton />}
                 </div>
               </ScrollArea>
               <ChatInput
