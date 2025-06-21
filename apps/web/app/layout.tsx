@@ -28,13 +28,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased `}
+        className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased min-h-screen h-screen bg-background flex flex-col`}
       >
         <ThemeProvider>
           <QueryProvider>
-            <div className="min-h-screen max-h-screen h-screen bg-background flex flex-col">
-              {children}
-            </div>
+            {children}
           </QueryProvider>
         </ThemeProvider>
       </body>
